@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostStore;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function __construct()
+     {
+        $this->middleware(['auth','rol.admin']);
+     }
+
     public function index()
     {
-        return view('dashboard.post.index');
+        $posts = Post::orderBy('id', 'ASC')->paginate(10);
+        return view('dashboard.post.index',['posts' => $posts]);
     }
 
     /**
@@ -25,7 +33,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('dashboard.post.create',['post'=>new Post()]);
+        $categories = Category::pluck('id','category');
+        return view('dashboard.post.create',['post'=>new Post(),'categories' => $categories]);
+
     }
 
     /**
@@ -83,6 +93,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return back()->with('status', 'Publicación Eliminada con exito');
     }
 }
