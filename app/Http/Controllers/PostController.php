@@ -22,8 +22,10 @@ class PostController extends Controller
 
     public function index()
     {
+
         $posts = Post::orderBy('id', 'ASC')->paginate(10);
         return view('dashboard.post.index',['posts' => $posts]);
+        
     }
 
     /**
@@ -69,7 +71,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('dashboard.post.edit',['post'=>$post]);
+
+        $categories = Category::pluck('id','category');
+        return view('dashboard.post.edit',['post' => $post,'categories' => $categories]);
+
     }
 
     /**
@@ -95,5 +100,6 @@ class PostController extends Controller
     {
         $post->delete();
         return back()->with('status', 'Publicación Eliminada con exito');
+
     }
 }

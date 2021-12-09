@@ -21,6 +21,7 @@ class CreatePostsTable extends Migration
             $table->bigInteger('category_id')->nullable()->unsigned();
             
             $table->timestamps();
+
         });
     }
 

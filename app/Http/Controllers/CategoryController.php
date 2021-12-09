@@ -21,7 +21,8 @@ class CategoryController extends Controller
 
     public function index()
     {
-        //
+        $categories = Category::orderBy('category', 'ASC')->paginate(10);
+        return view('dashboard.category.index',['categories' => $categories]);
     }
 
     /**
@@ -31,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('dashboard.category.create');
+        return view('dashboard.category.create',['category' => new Category()]);
     }
 
     /**
@@ -54,7 +55,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('dashboard.category.show', ['category' => $category]);
     }
 
     /**
@@ -65,7 +66,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('dashboard.category.edit', ['category' => $category]);
     }
 
     /**
@@ -75,9 +76,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryStore $request, Category $category)
     {
-        //
+        $category->update($request-> validated());
+        return back()->with('status', 'Categoría actualizada con éxito');
     }
 
     /**
@@ -88,6 +90,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return back()->with('status', 'Categoría eliminada con éxito');
     }
 }
